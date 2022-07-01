@@ -1,0 +1,72 @@
+-- 1
+
+DROP TABLE IF EXISTS logs;
+CREATE TABLE logs (
+  dt DATETIME,
+  tname varchar(8),
+  id BIGINT UNSIGNED NOT NULL,
+  name varchar(255)
+) ENGINE = Archive;
+
+DELIMITER //
+
+DROP TRIGGER IF EXISTS u//
+CREATE TRIGGER u AFTER INSERT ON users
+FOR EACH ROW
+BEGIN
+	INSERT INTO logs VALUES(NOW(), 'users', NEW.id, NEW.name);
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+DROP TRIGGER IF EXISTS c//
+CREATE TRIGGER c AFTER INSERT ON catalogs
+FOR EACH ROW
+BEGIN
+	INSERT INTO logs VALUES(NOW(), 'catalogs', NEW.id, NEW.name);
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+DROP TRIGGER IF EXISTS p//
+CREATE TRIGGER p AFTER INSERT ON products
+FOR EACH ROW
+BEGIN
+	INSERT INTO logs VALUES(NOW(), 'products', NEW.id, NEW.name);
+END//
+
+DELIMITER ;
+
+INSERT INTO users (id, name) VALUES(1, 'd');
+INSERT INTO users (name) VALUES('p');
+
+SELECT * FROM users;
+
+SELECT * FROM logs;
+
+-- 2
+
+DROP TABLE IF EXISTS u;
+CREATE TABLE u(
+	id int
+);
+
+INSERT INTO u VALUES
+(1),
+(2),
+(3),
+(4),
+(5),
+(6),
+(7),
+(8),
+(9),
+(10);
+
+INSERT INTO u SELECT fi.id FROM u fi, u se, u th, u fo, u si, u ei LIMIT 999990;
+
+SELECT * FROM u;
